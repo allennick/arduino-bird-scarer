@@ -5,6 +5,8 @@ const int SD_CARD_CS_PIN = 10;
 const int PHOTOCELL_PIN = 0;
 
 const unsigned int DATA_SIZE = 10;
+const boolean DEBUG = true;
+
 
 BirdData data[DATA_SIZE];
 
@@ -48,7 +50,7 @@ void setup() {
     delay(10000);
     resetFunc();
     
-    while(1);
+    // while(1);
   } else {
     Serial.println("Wiring is correct and a card is present."); Serial.flush();
   }
@@ -70,19 +72,29 @@ void loop() {
   Serial.print("Photocell (0-1023): "); Serial.flush();
   Serial.println(pPin); Serial.flush();
 
-  if(pPin < 100 && pPin > 1) {
+  if(pPin < 200) {
     when = 'N';
   }
 
-  playRandomWavFile(when);
-
-  // random amount of wait time between calls (day: 10 - 180 seconds, night: 75 - 900 seconds)
+  if(pPin > 30) {
+    playRandomWavFile(when);
+  }
+  // else - It is really dark out, so we won't play any sounds right now. 
+  // People want to sleep too. :-)
+  
+  // random amount of wait time between calls
   unsigned long waitTime = 10000;
   if('D' == when) {
-    waitTime = (random(10,180) * 1000);
+    // 10 - 30 minutes
+    waitTime = (random(600,1800) * 1000);
   }
   else if('N' == when){
-    waitTime = (random(75,900) * 1000);
+    // 30 - 60 minutes
+    waitTime = (random(1800,3600) * 1000);
+  }
+  if(DEBUG) {
+    // override to 10 seconds
+    waitTime = 10000;
   }
   Serial.print("waitTime: "); Serial.flush();
   Serial.println(waitTime); Serial.flush();
