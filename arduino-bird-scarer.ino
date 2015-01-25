@@ -5,7 +5,7 @@ const int SD_CARD_CS_PIN = 10;
 const int PHOTOCELL_PIN = 0;
 
 const unsigned int DATA_SIZE = 10;
-const boolean DEBUG = true;
+const boolean DEBUG = false;
 
 
 BirdData data[DATA_SIZE];
